@@ -1,6 +1,24 @@
 import re
 
+class functionDeclare:
+    def __init__(self, source):
+        self._source = source
+        self.name =""
+        self.variable =[]
+        self.parse()
+    def parse(self):
+        self.name = re.findall(r'\s[a-zA-Z_]*.+?(?=\()', self._source, re.I)
+        self.variable = re.findall(r'\((.*)\)', self._source, re.I)
 
+class procedureDeclare:
+    def __init__(self, source):
+        self._source = source
+        self.name =""
+        self.variable =[]
+        self.parse()
+    def parse(self):
+        self.name = re.findall(r'\s[a-zA-Z_]*.+?(?=\()', self._source, re.I)
+        self.variable = re.findall(r'\((.*)\)', self._source, re.I)
 class FileParser:
     def __init__(self, filename):
 
@@ -14,13 +32,15 @@ class FileParser:
 
     def search_procedure_declare(self):
         result = re.findall(r'PROCEDURE\s+[a-zA-Z_]*\([a-zA-Z0-9_,:=\n+\s.]+\)', self._fileData, re.I)
-        self._functionDeclare = [re.sub("^\s+|\n|\r|\s+$", ' ', line) for line in result]
-        return self._functionDeclare
+        self._procedureDeclare = [procedureDeclare(re.sub(r'^\s+|\n|\r|\s+$', ' ', line)) for line in result]
+        return self._procedureDeclare
 
     def search_procedure_calling(self):
         return self._procedureCalling
 
     def search_function_declare(self):
+        result = re.findall(r'FUNCTION\s+[a-zA-Z_]*\([a-zA-Z0-9_,:=\n+\s.]+\)', self._fileData, re.I)
+        self._functionDeclare = [functionDeclare(re.sub('^\s+|\n|\r|\s+$', ' ', line)) for line in result]
         return self._functionDeclare
 
     def search_function_calling(self):
