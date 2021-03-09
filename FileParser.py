@@ -44,6 +44,9 @@ class FileParser:
         return self._functionDeclare
 
     def search_function_calling(self):
+        #([a-zA-Z_.0-9]*\([a-zA-Z0-9_.*,'\s]*\))
+        result = re.findall(r'([a-zA-Z_.0-9]*\([a-zA-Z0-9_.*,\'\s]*\))', self._fileData, re.I)
+        self._functionCalling = [line for line in result]
         return self._functionCalling
 
     def search_table_calling(self):
